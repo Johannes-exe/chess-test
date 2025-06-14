@@ -48,21 +48,40 @@ data class Move(val from: Position, val to: Position, val board: ChessBoard) {
      * @throws IllegalArgumentException if the move is invalid.
      */
 
-    fun castleKingSide(game: Game):Boolean{
-        val kingFirstMove = true
-        val rookFirstMove = true
-        val rookW = Rook(Color.WHITE)
-        val kingW = King(Color.WHITE)
+    fun castleKingSide(game: Game): Boolean {
+        val isWhite = from.row == Row.ONE
+        val kingStart = if (isWhite) Position(Column.E, Row.ONE) else Position(Column.E, Row.EIGHT)
+        val rookStart = if (isWhite) Position(Column.H, Row.ONE) else Position(Column.H, Row.EIGHT)
+        val kingDest = if (isWhite) Position(Column.G, Row.ONE) else Position(Column.G, Row.EIGHT)
+        val rookDest = if (isWhite) Position(Column.F, Row.ONE) else Position(Column.F, Row.EIGHT)
 
-        if(kingFirstMove && rookFirstMove){
-            val kingPosition = Position(Column.E, Row.ONE)
-            val kingTo = Position(Column.B, Row.ONE)
-            val rookPosition = Position(Column.A, Row.ONE)
-            val rookTo = Position(Column.C, Row.ONE)
+        val king = game.board.getFigureAt(kingStart)
+        val rook = game.board.getFigureAt(rookStart)
 
-            board.placePieces(rookTo, rookW)
-            board.placePieces(kingTo, kingW)
+        if (king !is King || rook !is Rook) return false
+
+        if (game.moves.any { it.from == kingStart } || game.moves.any { it.from == rookStart }) {
+            return false
         }
+
+        if (game.board.getFigureAt(rookDest) != null || game.board.getFigureAt(kingDest) != null) return false
+
+        if (isWhite) {
+            if (game.whiteCheck() || !game.isSpaceFree(game, Position(Column.F, Row.ONE), true) ||
+                !game.isSpaceFree(game, kingDest, true)) {
+                return false
+            }
+        } else {
+            if (game.blackCheck() || !game.isSpaceFree(game, Position(Column.F, Row.EIGHT), false) ||
+                !game.isSpaceFree(game, kingDest, false)) {
+                return false
+            }
+        }
+
+        game.board.removePiece(kingStart)
+        game.board.removePiece(rookStart)
+        game.board.placePieces(kingDest, king)
+        game.board.placePieces(rookDest, rook)
         return true
     }
    }
