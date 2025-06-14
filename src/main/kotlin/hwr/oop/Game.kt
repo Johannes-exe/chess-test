@@ -28,9 +28,12 @@ class Game {
         val move = Move(from, to, board)
 
         if (move.isValid()) {
+            val wasCapture = move.isCapture()
+            board.move(from, to)
+
             totalMoves += 1
             moves.add(move) // Add the move to the list of moves
-            if (move.isCapture() || figure is Pawn) {
+            if (wasCapture || figure is Pawn) {
                 totalMoves = 0 // Reset total moves if a pawn moves or a piece is captured
             }
 

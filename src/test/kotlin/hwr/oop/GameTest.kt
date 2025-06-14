@@ -51,6 +51,19 @@ class GameTest : AnnotationSpec() {
     }
 
     @Test
+    fun `makeMove actually moves piece on board`() {
+        val game = Game()
+        val from = Position(Column.E, Row.TWO)
+        val to = Position(Column.E, Row.FOUR)
+
+        val movedFigure = game.board.getFigureAt(from)
+        game.makeMove(from, to)
+
+        assertThat(game.board.getFigureAt(from)).isNull()
+        assertThat(game.board.getFigureAt(to)).isEqualTo(movedFigure)
+    }
+
+    @Test
     fun `whiteCheck returns false if there is no white king on the board`() {
         val game = Game()
         game.board = ChessBoard.emptyBoard()
@@ -83,7 +96,11 @@ class GameTest : AnnotationSpec() {
         game.makeMove(fromBlack, toBlack)
         val fromWhiteCapture = Position(Column.E, Row.FOUR)
         val toWhiteCapture = Position(Column.D, Row.FIVE)
+        val capturingPawn = game.board.getFigureAt(fromWhiteCapture)
         game.makeMove(fromWhiteCapture, toWhiteCapture)
+
+        assertThat(game.board.getFigureAt(fromWhiteCapture)).isNull()
+        assertThat(game.board.getFigureAt(toWhiteCapture)).isEqualTo(capturingPawn)
         assertThat(game.isGameOver()).isFalse()
     }
 
@@ -259,6 +276,20 @@ class GameTest : AnnotationSpec() {
         val game = Game()
         assertThat(game.moves).isEmpty()
         assertThat(game.totalMoves).isEqualTo(0)
+    }
+
+    @Test
+    fun `pawn promotion via makeMove replaces pawn with chosen figure`() {
+        val game = Game()
+        val board = ChessBoard.emptyBoard()
+        board.placePieces(Position(Column.A, Row.SEVEN), Pawn(Color.WHITE))
+        game.board = board
+
+        game.makeMove(Position(Column.A, Row.SEVEN), Position(Column.A, Row.EIGHT), FigureType.Queen)
+
+        val promoted = game.board.getFigureAt(Position(Column.A, Row.EIGHT))
+        assertThat(promoted).isInstanceOf(Queen::class.java)
+        assertThat(game.board.getFigureAt(Position(Column.A, Row.SEVEN))).isNull()
     }
 
 
