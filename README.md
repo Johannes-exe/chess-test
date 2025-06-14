@@ -73,22 +73,7 @@ Das Ziel dieses Projekts ist es, ein funktionierendes Schachspiel zu implementie
 |--------|------------------|--------------------------------------------|----------------------------------------|
 | 1      | Wer kann ziehen  | Nur die Farbe kann ziehen, die am Zug ist  | Damit keiner Farbe zweimal ziehen kann |
 
-## Instructions
 
-[TODO]: (Remove these instructions once you finished your fork's setup.)
-
-## TODO
-
-
-
-Use a fork of this repository to do implement your project.
-
-Remember to add this repository as a second remote repository (upstream) and pull from the correct
-remotes.
-This is necessary, because we might apply changes to this template during the next month.
-
-The following section describes how to add multiple remote repositories to your local repository,
-which is cloned from the fork.
 
 ### Formatting
 
@@ -110,15 +95,15 @@ To configure your git remote repositories, use the `git remote` command set.
 1. Clone your fork and go enter the repository.
 
 ```
-git clone <fork-url>
-cd <created-folder>
+git clone https://github.com/your-username/chess-test.git
+cd chess-test
 ```
 
 1. Now your fork is configured as primary remote repository (origin).
    Next to origin, you should add the original repository as a second remote repository (upstream).
 
 ```
-git remote add upstream <repository-url>
+git remote add upstream https://github.com/hwr-oop/chess-test.git
 ```
 
 1. Verify that both remotes are configured correctly.
