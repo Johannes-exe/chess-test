@@ -229,10 +229,15 @@ class GameTest : AnnotationSpec() {
     fun `castleKingSide setzt König und Turm korrekt um`() {
         val board = ChessBoard.emptyBoard()
         val game = Game()
+        board.placePieces(Position(Column.E, Row.ONE), King(Color.WHITE))
+        board.placePieces(Position(Column.H, Row.ONE), Rook(Color.WHITE))
+        game.board = board
+
         val move = Move(Position(Column.E, Row.ONE), Position(Column.G, Row.ONE), board)
         move.castleKingSide(game)
-        val king = board.getFigureAt(Position(Column.B, Row.ONE))
-        val rook = board.getFigureAt(Position(Column.C, Row.ONE))
+
+        val king = board.getFigureAt(Position(Column.G, Row.ONE))
+        val rook = board.getFigureAt(Position(Column.F, Row.ONE))
         assertThat(king).isInstanceOf(King::class.java)
         assertThat(rook).isInstanceOf(Rook::class.java)
     }
