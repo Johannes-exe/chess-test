@@ -155,7 +155,7 @@
         <version>${maven-surefire-plugin.version}</version>
         <configuration>
           <systemPropertyVariables>
-            <mainClass>hwr.oop.KotlinExample</mainClass>
+              <mainClass>hwr.oop.MainKt</mainClass>
             <kotest.framework.classpath.scanning.autoscan.disable>true</kotest.framework.classpath.scanning.autoscan.disable>
           </systemPropertyVariables>
         </configuration>
@@ -196,7 +196,7 @@
           </execution>
         </executions>
         <configuration>
-          <mainClass>hwr.oop.BoardKt</mainClass>
+          <mainClass>hwr.oop.MainKt</mainClass>
         </configuration>
       </plugin>
       <plugin>
