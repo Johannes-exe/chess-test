@@ -62,7 +62,48 @@ class ChessBoard(private val board: MutableMap<Position, Figure>) {
          */
         fun fromFEN(fenString: String): ChessBoard {
             val fen = FEN(fenString)
-            return ChessBoard(mutableMapOf())
+            val board = mutableMapOf<Position, Figure>()
+
+            val rows = fen.getPiecePlacement().split("/")
+            require(rows.size == 8) { "Invalid FEN: wrong row count" }
+
+            for ((rowIndex, rowStr) in rows.withIndex()) {
+                var colIndex = 0
+                for (char in rowStr) {
+                    when {
+                        char.isDigit() -> {
+                            colIndex += char.digitToInt()
+                        }
+                        else -> {
+                            val column = Column.values().getOrNull(colIndex)
+                                ?: throw IllegalArgumentException("Invalid FEN: row too long")
+                            val row = Row.values()[7 - rowIndex]
+                            val figure = when (char) {
+                                'b' -> Pawn(Color.WHITE)
+                                'B' -> Pawn(Color.BLACK)
+                                't' -> Rook(Color.WHITE)
+                                'T' -> Rook(Color.BLACK)
+                                's' -> Knight(Color.WHITE)
+                                'S' -> Knight(Color.BLACK)
+                                'l' -> Bishop(Color.WHITE)
+                                'L' -> Bishop(Color.BLACK)
+                                'd' -> Queen(Color.WHITE)
+                                'D' -> Queen(Color.BLACK)
+                                'k' -> King(Color.WHITE)
+                                'K' -> King(Color.BLACK)
+                                else -> throw IllegalArgumentException("Invalid figure in FEN: $char")
+                            }
+                            board[Position(column, row)] = figure
+                            colIndex++
+                        }
+                    }
+                }
+                if (colIndex != 8) {
+                    throw IllegalArgumentException("Invalid FEN: row length not 8")
+                }
+            }
+
+            return ChessBoard(board)
         }
     }
 
