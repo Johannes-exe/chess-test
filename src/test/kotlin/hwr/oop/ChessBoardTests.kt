@@ -27,14 +27,22 @@ class ChessBoardTests : AnnotationSpec() {
     }
 
     @Test
+    fun `fromFEN builds board correctly for full board`() {
+        val fenString = "TSLDKLST/BBBBBBBB/8/8/8/8/bbbbbbbb/tsldklst w KQkq - 0 1"
+        val board = ChessBoard.fromFEN(fenString)
+
+        assertThat(board.getFigureAt(Position(Column.A, Row.EIGHT))).isInstanceOf(Rook::class.java)
+        assertThat(board.getFigureAt(Position(Column.E, Row.ONE))).isInstanceOf(King::class.java)
+        assertThat(board.getFigureAt(Position(Column.A, Row.TWO))).isInstanceOf(Pawn::class.java)
+        assertThat(board.getAllPositions().size).isEqualTo(32)
+    }
+
+    @Test
     fun `fromFEN throws IllegalArgumentException for invalid FEN`() {
         val invalidFEN = "invalidFENString"
-
-        val exception = assertThrows<IllegalArgumentException> {
+        assertThrows<IllegalArgumentException> {
             ChessBoard.fromFEN(invalidFEN)
         }
-
-        assertThat(exception.message?.contains("Invalid figure in FEN") == true)
     }
 
     @Test
